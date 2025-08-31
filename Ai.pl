@@ -30,6 +30,7 @@ check_board(WebSocket) :-
 
 check_board_response(Response_dict, Message) :-
     %%process_board(BoardList, N, NewBoardList),
+    write('Jogada do X1: '), write(Message.data.board), nl,
     process_board(Message.data.board, Message.data.index, NewBoardList),
     write('Jogada do X2: '), write(NewBoardList), nl,
     Response_dict = _{ board: NewBoardList }. 
@@ -37,12 +38,12 @@ check_board_response(Response_dict, Message) :-
 
 process_board(BoardList, N, NewBoardList) :-
     length(BoardList, Len),
-    monta_tab(NumList, Len),
+    monta_tab(NumList, Len, BoardList),
     move_x(NumList, N, TempBoardList),
     write('Jogada do X: '), write(TempBoardList), nl,
-    joga(TempBoardList,NewBoardList),
-    write('Jogada do O: '), 
-    write(NewBoardList), nl, 
+    joga(TempBoardList, NewBoardList),
+    write('Jogada do O: '),
+    write(NewBoardList), nl,
     write('4').
     
 
@@ -276,8 +277,11 @@ wr(T):-
 test_R([R|_],H,I):-
     I = 1->  (   R = H ->  true ; false); false.
 
-monta_tab(T,A) :-
-   numlist(1,A,T).
+monta_tab(T0,A,Tab) :-
+   numlist(1,A,T0),
+   same_c(T0,Tab,K),
+   write(T0).
+
 
 move_monta([H|L],X,R,E,K,B,Posicao):-  
     length(L,I),

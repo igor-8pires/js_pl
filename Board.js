@@ -58,16 +58,13 @@ document.addEventListener('DOMContentLoaded', () => {
             let tab= data.board;
             console.log(tab);
             for (let i = 0; i < tab.length; i++) {
-                if(tab[i] == 'x' && tab[i] == 'o'){
-                    cells[i].textContent = tab;
-                } else {
-                    cells[i].textContent = "";
+                if(tab[i] == 'x'){
+                    makeMove(i);
+                }else if(tab[i] == 'o'){
+                    makeO(i);
                 }
-            }
+            };
             console.log('Received:', data);
-            Index=data.index - 1;
-            makeO(Index);
-
         });
      
     }
