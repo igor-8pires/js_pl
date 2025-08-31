@@ -23,17 +23,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (mode === 'computer') {
         // consulting prolog AI on websocket
-        const socket = new WebSocket('ws://localhost:12345');
+        const socket = new WebSocket('ws://localhost:12345/ws');
         socket.onopen = () => {
             console.log('WebSocket connection established');
+            console.log('board state:', Array.from(cells).map(cell => cell.textContent));
+                  
         };
-        socket.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            if (data.type === 'move') {
-                console.log('move made from player:', data);
-                //const { index } = data;
-                //makeMove(index);
+        document.addEventListener('click', (event) => {
+            if (event.target.className === 'cell') {
+                const index = Array.from(cells).indexOf(event.target);
+                if (cells[index].textContent === '') {
+                    makeMove(index);
+                    socket.send(JSON.stringify({ type: 'move', index }));
+                    board = Array.from(cells).map(cell => cell.textContent);
+                    console.log('board state:', board);
+                    const data = JSON.parse(board);
+                    // Process the data as needed
+                }
             }
+        });
+        socket.onmessage = (event) => {
+            
         };
     }
 });
